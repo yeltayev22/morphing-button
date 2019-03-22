@@ -25,14 +25,15 @@ Step 3. Use MorphingButton in your layout
 
 ```
 <yeltayev.kz.moprhingbutton.MorphingButton
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginBottom="8dp"
-            app:text="@string/label_adult"
-            app:button_height="80dp"
-            app:circular_button_height="60dp"
-            app:color="@color/colorPrimary"/>
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="8dp"
+        app:button_height="80dp"
+        app:circular_button_height="60dp"
+        app:color="@color/colorPrimary"
+        app:text="@string/label_sale"
+        app:text_helper="25 dollars" />
 ```
