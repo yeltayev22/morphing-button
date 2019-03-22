@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">MorphingButton</string>
     <string name="label_adult">Adult</string>
+    <string name="label_child">Child</string>
+    <string name="label_preferential">Preferential</string>
+    <string name="label_sale">Sale</string>
 </resources>
