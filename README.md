@@ -3,7 +3,6 @@ Morphing Button Library with animation for tickets
 
 ![](morphing-button.gif)
 
-How to use:
 Step 1. Add the JitPack repository to your build file.
 Add it in your root build.gradle at the end of repositories:
 ```
@@ -18,7 +17,7 @@ allprojects {
 Step 2. Add the dependency
 ```
 dependencies {
-	        implementation 'com.github.yeltayev22:morphing-button:1.0.1'
+	        implementation 'com.github.yeltayev22:morphing-button:1.0.2'
 	}  
 ```
 
