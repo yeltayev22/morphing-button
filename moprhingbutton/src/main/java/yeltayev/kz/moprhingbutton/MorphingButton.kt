@@ -3,7 +3,7 @@ package yeltayev.kz.moprhingbutton
 /**
  *  Created by Nurdaulet Yeltayev
  *  https://github.com/yeltayev22
- *  Copyright 2019
+ *  Copyright © 2019
  */
 
 import android.animation.AnimatorSet
@@ -14,8 +14,10 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.RectF
 import android.support.v4.graphics.drawable.DrawableCompat
+import android.text.SpannableString
 import android.text.StaticLayout
 import android.text.TextPaint
+import android.text.style.RelativeSizeSpan
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
@@ -24,7 +26,7 @@ import e.kz.moprhingbutton.R
 
 class MorphingButton
 @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyle: Int = 0) :
-    View(context, attrs, defStyle) {
+        View(context, attrs, defStyle) {
 
     private val screenWidth = context.screenWidth()
     private val buttonCornerRadius = context.dpToPx(BUTTON_CORNER_RADIUS_DP)
@@ -47,13 +49,13 @@ class MorphingButton
 
     private val ticketTypeTextPaint = TextPaint(TextPaint.ANTI_ALIAS_FLAG).apply {
         color = context.color(R.color.white)
-        textSize = context.spToPx(16F).toFloat()
+        textSize = context.spToPx(14F).toFloat()
     }
 
     private val ticketQuantityTextPaint = TextPaint(TextPaint.ANTI_ALIAS_FLAG).apply {
         color = context.color(R.color.black)
         textAlign = Paint.Align.CENTER
-        textSize = context.spToPx(16F).toFloat()
+        textSize = context.spToPx(14F).toFloat()
     }
 
     private val rightButtonWidthAnimator = object : AnimatorConfig() {
@@ -105,14 +107,14 @@ class MorphingButton
         }
 
         playTogether(
-            rightButtonWidthAnimator.animator,
-            leftButtonWidthAnimator.animator,
-            leftButtonRadiusAnimator.animator,
-            leftButtonHeightAnimator.animator,
-            ticketTypeTextAnimator.animator,
-            plusIconPositionAnimator.animator,
-            plusIconRotationAnimator.animator,
-            alphaAnimator.animator
+                rightButtonWidthAnimator.animator,
+                leftButtonWidthAnimator.animator,
+                leftButtonRadiusAnimator.animator,
+                leftButtonHeightAnimator.animator,
+                ticketTypeTextAnimator.animator,
+                plusIconPositionAnimator.animator,
+                plusIconRotationAnimator.animator,
+                alphaAnimator.animator
         )
     }
 
@@ -124,6 +126,7 @@ class MorphingButton
 
     private var ticketQuantityLabel: CharSequence? = null
     private var ticketTypeLabel: CharSequence? = null
+    private var ticketTypeCost: CharSequence? = null
 
     private var ticketQuantityLabelLayout: StaticLayout? = null
     private var ticketTypeLabelLayout: StaticLayout? = null
@@ -132,6 +135,7 @@ class MorphingButton
         val a = context.theme.obtainStyledAttributes(attrs, R.styleable.MorphingButton, 0, 0)
         try {
             ticketTypeLabel = a.getString(R.styleable.MorphingButton_text)
+            ticketTypeCost = a.getString(R.styleable.MorphingButton_text_helper)
             buttonColor = a.getColor(R.styleable.MorphingButton_color, buttonColor)
             buttonHeight = a.getDimension(R.styleable.MorphingButton_button_height, buttonHeight)
             circularButtonSize = a.getDimension(R.styleable.MorphingButton_circular_button_height, circularButtonSize)
@@ -146,7 +150,12 @@ class MorphingButton
             if (field != value) {
                 field = value
 
-                ticketQuantityLabel = ticketQuantity.toString()
+                val quantityString = ticketQuantity.toString()
+                val label = SpannableString("$ticketQuantity\namount")
+                label.setSpan(RelativeSizeSpan(2f), 0, quantityString.length, 0)
+                label.setSpan(RelativeSizeSpan(1f), quantityString.length + 1, label.length, 0)
+
+                ticketQuantityLabel = label
 
                 updateTextLayouts()
 
@@ -171,20 +180,23 @@ class MorphingButton
                     (buttonHeight - leftButtonHeightAnimator.getEndValue()) / 2f
 
             ticketQuantityLabelLayout = makeStaticLayout(
-                ticketQuantityLabel,
-                ticketQuantityTextPaint,
-                labelWidth.toInt()
+                    ticketQuantityLabel,
+                    ticketQuantityTextPaint,
+                    labelWidth.toInt()
             )
         }
+        val ticketTypeString = ticketTypeLabel.toString()
+        val label = SpannableString("$ticketTypeLabel\n$ticketTypeCost")
+        label.setSpan(RelativeSizeSpan(1.5f), 0, ticketTypeString.length, 0)
+        label.setSpan(RelativeSizeSpan(1f), ticketTypeString.length + 1, label.length, 0)
 
-        val ticketTypeLabel = ticketTypeLabel
-        if (ticketTypeLabel != null && measuredWidth > 0) {
+        if (measuredWidth > 0) {
             val labelWidth = rightButtonWidthAnimator.getEndValue() - (plusIcon?.width ?: 0)
 
             ticketTypeLabelLayout = makeStaticLayout(
-                ticketTypeLabel,
-                ticketTypeTextPaint,
-                labelWidth.toInt()
+                    label,
+                    ticketTypeTextPaint,
+                    labelWidth.toInt()
             )
         }
         invalidate()
@@ -192,8 +204,8 @@ class MorphingButton
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         setMeasuredDimension(
-            resolveSize(screenWidth, widthMeasureSpec),
-            resolveSize(buttonHeight.toInt(), heightMeasureSpec)
+                resolveSize(screenWidth, widthMeasureSpec),
+                resolveSize(buttonHeight.toInt(), heightMeasureSpec)
         )
 
         updateTextLayouts()
@@ -231,10 +243,10 @@ class MorphingButton
         val leftButtonPadding = (measuredHeight - leftButtonHeightAnimator.getAnimatedValue()) / 2
 
         rect.set(
-            leftButtonPadding,
-            leftButtonPadding,
-            leftButtonPadding + leftButtonWidth,
-            leftButtonPadding + leftButtonHeight
+                leftButtonPadding,
+                leftButtonPadding,
+                leftButtonPadding + leftButtonWidth,
+                leftButtonPadding + leftButtonHeight
         )
 
         paint.color = getButtonColor(isLeftButtonPressed)

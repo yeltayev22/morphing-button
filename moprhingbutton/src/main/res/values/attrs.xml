@@ -2,6 +2,7 @@
 <resources>
     <declare-styleable name="MorphingButton">
         <attr name="text" format="string" />
+        <attr name="text_helper" format="string" />
         <attr name="color" format="color" />
         <attr name="button_height" format="dimension" />
         <attr name="circular_button_height" format="dimension" />
